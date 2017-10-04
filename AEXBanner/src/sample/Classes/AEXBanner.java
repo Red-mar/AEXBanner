@@ -31,6 +31,7 @@ public class AEXBanner extends Application {
 
         Font font = new Font("Arial", HEIGHT);
         text = new Text();
+        text.setText("iets");
         text.setFont(font);
         text.setFill(Color.BLACK);
 
@@ -52,9 +53,19 @@ public class AEXBanner extends Application {
             public void handle(long now) {
                 long lag = now - prevUpdate;
                 if (lag >= NANO_TICKS) {
+<<<<<<< HEAD
                     // calculate new location of text
                     // TODO
                     text.relocate(textPosition, 0);
+=======
+                    if (textPosition < -textLength){
+                        textPosition = WIDTH;
+                    }else{
+                        textPosition -= 20;
+                    }
+
+                    text.relocate(textPosition,0);
+>>>>>>> f0bb54fce0597680ae7f1471d0711d3f64dc388a
                     prevUpdate = now;
                 }
             }
