@@ -16,6 +16,9 @@ public class BannerController {
         // Start polling timer: update banner every two seconds
         pollingTimer = new Timer();
         // TODO
+        for(IFonds koers : ffectenbeurs.getKoersen()) {
+            banner.setKoersen(koers.getNaam() + ": " + koers.getKoers() + ", ");
+        }
     }
 
     // Stop banner controller
@@ -23,6 +26,7 @@ public class BannerController {
         pollingTimer.cancel();
         // Stop simulation timer of effectenbeurs
         // TODO
+
     }
 }
 
