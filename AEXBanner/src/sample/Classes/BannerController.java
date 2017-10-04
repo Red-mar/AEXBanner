@@ -1,14 +1,28 @@
 package sample.Classes;
 
+import java.util.Timer;
+
 public class BannerController {
-    AEXBanner aexBanner;
-    IEffectenbeurs effectenbeurs;
+
+    private AEXBanner banner;
+    private IEffectenbeurs effectenbeurs;
+    private Timer pollingTimer;
 
     public BannerController(AEXBanner banner) {
-        this.aexBanner = banner;
+
+        this.banner = banner;
+        this.effectenbeurs = new MockEffectenbeurs();
+
+        // Start polling timer: update banner every two seconds
+        pollingTimer = new Timer();
+        // TODO
     }
 
-    public void stop(){
-
+    // Stop banner controller
+    public void stop() {
+        pollingTimer.cancel();
+        // Stop simulation timer of effectenbeurs
+        // TODO
     }
 }
+
