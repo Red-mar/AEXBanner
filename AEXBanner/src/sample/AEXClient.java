@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.Classes.AEXBanner;
 
-public class Main extends Application {
+public class AEXClient extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{

@@ -1,6 +1,8 @@
 package sample.Classes;
 
-public class Fonds implements IFonds {
+import java.io.Serializable;
+
+public class Fonds implements IFonds, Serializable {
     private String naam;
     private double koers;
 
