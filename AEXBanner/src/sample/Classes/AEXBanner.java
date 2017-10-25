@@ -11,6 +11,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import sample.Classes.BannerController;
 
+import java.rmi.RemoteException;
+
 public class AEXBanner extends Application {
 
     public static final int WIDTH = 1000;
@@ -27,7 +29,11 @@ public class AEXBanner extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        controller = new BannerController(this);
+        try {
+            controller = new BannerController(this);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
 
         Font font = new Font("Arial", HEIGHT);
         text = new Text();

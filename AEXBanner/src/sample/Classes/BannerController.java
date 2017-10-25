@@ -1,14 +1,19 @@
 package sample.Classes;
 
+import com.sun.org.apache.bcel.internal.generic.IREM;
 import javafx.application.Platform;
+import sample.src.fontyspublisher.IRemotePropertyListener;
+import sample.src.fontyspublisher.IRemotePublisherForListener;
 
+import java.beans.PropertyChangeEvent;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Timer;
 
-public class BannerController {
+public class BannerController extends UnicastRemoteObject implements IRemotePropertyListener {
 
     private AEXBanner banner;
     private Timer pollingTimer;
@@ -18,9 +23,12 @@ public class BannerController {
     private IEffectenbeurs effectenbeurs = null;
 
     private String ipAddress = "localhost";
-    private int portNumber = 1099;
+    private int portNumber = 4321;
 
-    public BannerController(AEXBanner banner) {
+    private IRemotePublisherForListener publisher;
+
+    public BannerController(AEXBanner banner) throws RemoteException {
+
 
         try {
             registry = LocateRegistry.getRegistry(ipAddress, portNumber);
@@ -37,6 +45,14 @@ public class BannerController {
             System.out.println("Client: Registry is null pointer");
         }
 
+        try {
+            publisher = (IRemotePublisherForListener) registry.lookup("MockEffectenbeurs");
+            publisher.subscribeRemoteListener(this, "koersen");
+        } catch (NotBoundException e) {
+            e.printStackTrace();
+        }
+
+        /*
         if (registry != null) {
             try {
                 effectenbeurs = (IEffectenbeurs) registry.lookup(bindingName);
@@ -51,6 +67,7 @@ public class BannerController {
             }
         }
 
+
         if (effectenbeurs != null) {
             System.out.println("Client: Effecten beurs bound");
         } else {
@@ -60,13 +77,16 @@ public class BannerController {
         if (effectenbeurs != null) {
             testEffectenbeurs();
         }
+        */
 
         this.banner = banner;
 
         // Start polling timer: update banner every two seconds
+        /*
         pollingTimer = new Timer();
         // TODO
         pollingTimer.scheduleAtFixedRate(new GetKoersen(), 0, 2000);
+        */
     }
 
     private void testEffectenbeurs() {
@@ -83,6 +103,12 @@ public class BannerController {
         // Stop simulation timer of effectenbeurs
         // TODO
 
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) throws RemoteException {
+        banner.setKoersen((String) evt.getNewValue());
+        System.out.println("Received property from server!");
     }
 
     class GetKoersen extends java.util.TimerTask {

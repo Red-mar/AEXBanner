@@ -1,8 +1,11 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
+import sample.Classes.IFonds;
 import sample.Classes.MockEffectenbeurs;
+import sample.src.fontyspublisher.RemotePublisher;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -12,16 +15,29 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Enumeration;
+import java.util.Timer;
 
 public class AEXServer {
 
-    private static final int portNumber = 1099;
+    private static final int portNumber = 4321;
     private static final String bindingName = "MockEffectenbeurs";
     private Registry registry = null;
     private MockEffectenbeurs effectenbeurs = null;
 
+    private RemotePublisher publisher;
+
     public AEXServer(){
         System.out.println("Server: Port number " + portNumber);
+
+        try {
+            publisher = new RemotePublisher();
+            publisher.registerProperty("koersen");
+            registry = LocateRegistry.createRegistry(portNumber);
+            registry.rebind(bindingName, publisher);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
 
         try {
             effectenbeurs = new MockEffectenbeurs();
@@ -33,6 +49,9 @@ public class AEXServer {
             effectenbeurs = null;
         }
 
+        Timer timer = new Timer();
+        timer.schedule(new GetKoersen(effectenbeurs, publisher), 0, 2500);
+/*
         try {
             registry = LocateRegistry.createRegistry(portNumber);
             System.out.println("Server: Registry created on port number " + portNumber);
@@ -48,7 +67,10 @@ public class AEXServer {
             System.out.println("Server: Cannot bind effectenbeurs");
             System.out.println("Server: RemoteException: " + ex.getMessage());
         }
+        */
     }
+
+
 
     // Print IP addresses and network interfaces
     private static void printIPAddresses() {
@@ -89,5 +111,6 @@ public class AEXServer {
         printIPAddresses();
 
         AEXServer server = new AEXServer();
+
     }
 }
