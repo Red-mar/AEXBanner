@@ -49,6 +49,8 @@ public class AEXServer {
             effectenbeurs = null;
         }
 
+        System.out.println(System.getProperty("java.rmi.server.hostname"));
+
         Timer timer = new Timer();
         timer.schedule(new GetKoersen(effectenbeurs, publisher), 0, 2500);
 /*
@@ -108,7 +110,9 @@ public class AEXServer {
     public static void main(String[] args){
         System.out.println("Welcome to the server.");
 
+        System.setProperty("java.rmi.server.hostname", "localhost" );
         printIPAddresses();
+
 
         AEXServer server = new AEXServer();
 

@@ -23,7 +23,7 @@ public class MockEffectenbeurs extends UnicastRemoteObject implements IEffectenb
         Random rnd = new Random();
 
         for (IFonds fond: fonds) {
-            fond.setKoers(fond.getKoers() * (rnd.nextDouble()));
+            fond.setKoers(fond.getKoers() * (rnd.nextDouble() * 10));
         }
 
         return fonds;
